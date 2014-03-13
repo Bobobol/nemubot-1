@@ -41,10 +41,12 @@ class MessageConsumer:
     def treat_in(self, context, msg):
         """Treat the input message"""
         if msg.cmd == "PING":
-            self.srv.send_pong(msg.content)
+            self.srv.send_pong(msg.params[0])
+
         else:
             # TODO: Manage credits
-            if msg.channel is None or self.srv.accepted_channel(msg.channel):
+            msg.receivers = self.srv.filter_receivers(msg.receivers)
+            if len(msg.receivers) == 0:
                 # All messages
                 context.treat_pre(msg, self.srv)
 

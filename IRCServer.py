@@ -122,17 +122,42 @@ class IRCServer(server.Server):
             if msg.channel in self.channels:
                 self.channels[msg.channel].treat(msg.cmd, msg)
 
+
+    def filter_receivers(self, receivers, sender=None):
+        """Return a filtered list of authorized channels and users"""
+        if self.allow_all:
+            return receivers
+
+        filtered = list()
+        for chan in receivers:
+            if (
+                    # Is the channel authorized?
+                    (chan in self.channels and
+                     # Is the sender on the channel?
+                     (
+                         sender is None or
+                         sender in self.channels[chan].people
+                     )) or
+                    # Accept private messages?
+                    (self.listen_nick and chan == self.nick)
+            ):
+                filtered.append(chan)
+
+
     def accepted_channel(self, chan, sender=None):
         """Return True if the channel (or the user) is authorized"""
         if self.allow_all:
             return True
+
         elif self.listen_nick:
             return (chan in self.channels and (sender is None or sender in
                                                self.channels[chan].people)
                     ) or chan == self.nick
+
         else:
             return chan in self.channels and (sender is None or sender
                                               in self.channels[chan].people)
+
 
     def join(self, chan, password=None, force=False):
         """Join a channel"""
