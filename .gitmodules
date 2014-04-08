@@ -1,3 +1,6 @@
 [submodule "modules/nextstop/external"]
 	path = modules/nextstop/external
 	url = git://github.com/nbr23/NextStop.git
+[submodule "wiki"]
+	path = wiki
+	url = git@github.com:nemunaire/nemubot.wiki.git
