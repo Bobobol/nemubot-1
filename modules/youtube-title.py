@@ -6,7 +6,7 @@ from more import Response
 nemubotversion = 3.4
 
 def help_tiny():
-  return "CVE description"
+  return "Return the video title from a youtube link"
 
 def help_full():
   return "No help "
